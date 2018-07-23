@@ -1,7 +1,7 @@
 open AlexaApp;
 
 let expressApp = Express.express();
-let alexaApp = app("AlexaApp");
+let alexaApp = app(~name="AlexaApp", ());
 
 alexaApp
 |> express(

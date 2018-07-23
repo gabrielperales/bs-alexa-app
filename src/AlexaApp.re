@@ -3,12 +3,12 @@ type complete;
 
 module Response = {
   type t;
-  [@bs.send.pipe: t] external say : string => complete = "say";
-  [@bs.send.pipe: t] external clear : unit => complete = "clear";
-  [@bs.send.pipe: t] external reprompt : string => complete = "reprompt";
+  [@bs.send.pipe: t] external say : string => alexaApp = "say";
+  [@bs.send.pipe: t] external clear : unit => alexaApp = "clear";
+  [@bs.send.pipe: t] external reprompt : string => alexaApp = "reprompt";
   [@bs.send.pipe: t]
-  external card : (string, ~content: string=?, unit) => complete = "card";
-  [@bs.send.pipe: t] external linkAccount : unit => complete = "linkAccount";
+  external card : (string, ~content: string=?, unit) => alexaApp = "card";
+  [@bs.send.pipe: t] external linkAccount : unit => alexaApp = "linkAccount";
   [@bs.send.pipe: t] external send : unit => Js.Promise.t(complete) = "send";
   [@bs.send.pipe: t]
   external fail : string => Js.Promise.t(complete) = "send";
@@ -18,7 +18,8 @@ module Request = {
   type t = {.};
 };
 
-[@bs.module "alexa-app"] [@bs.new] external app : string => alexaApp = "";
+[@bs.module "alexa-app"] [@bs.new]
+external app : (~name: string=?, unit) => alexaApp = "";
 
 [@bs.deriving abstract]
 type config = {
@@ -32,7 +33,9 @@ type config = {
 [@bs.send.pipe: alexaApp] external express : config => alexaApp = "express";
 
 [@bs.send.pipe: alexaApp]
-external launch : ((Request.t, Response.t) => complete) => alexaApp = "launch";
+external launch : ((Request.t, Response.t) => alexaApp) => alexaApp = "launch";
+
+[@bs.send.pipe: alexaApp] external lambda : 'lambdaHandler = "lambda";
 
 type slot = {
   name: string,
@@ -41,5 +44,5 @@ type slot = {
 
 [@bs.send.pipe: alexaApp]
 external intent :
-  (~name: string, (Request.t, Response.t) => complete) => alexaApp =
+  (~name: string, (Request.t, Response.t) => alexaApp) => alexaApp =
   "intent";
