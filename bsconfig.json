@@ -7,6 +7,9 @@
   }, {
     "dir": "example",
     "subdirs" : true
+  }, {
+    "dir": "__tests__",
+    "type": "dev"
   }],
   "package-specs": {
     "module": "commonjs",
@@ -15,5 +18,6 @@
   "suffix": ".bs.js",
   "bs-dependencies": [
     "bs-express"
-  ]
+  ],
+  "bs-dev-dependencies": ["@glennsl/bs-jest"]
 }

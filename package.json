@@ -5,7 +5,9 @@
     "start": "node example/ExpressExample.bs.js",
     "clean": "bsb -clean-world",
     "build": "bsb -make-world",
-    "watch": "bsb -make-world -w"
+    "watch": "bsb -make-world -w",
+    "test": "jest --watchAll",
+    "test:ci": "jest --ci --bail --no-cache"
   },
   "keywords": [
     "BuckleScript"
@@ -13,6 +15,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@glennsl/bs-jest": "^0.4.2",
     "bs-platform": "^3.1.5"
   },
   "dependencies": {

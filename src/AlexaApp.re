@@ -2,7 +2,12 @@ type alexaApp;
 type complete;
 
 module Response = {
-  type t;
+  type t = {
+    .
+    resolved: bool,
+    response: {.},
+    sessionObject: {.},
+  };
   [@bs.send.pipe: t] external say : string => alexaApp = "say";
   [@bs.send.pipe: t] external clear : unit => alexaApp = "clear";
   [@bs.send.pipe: t] external reprompt : string => alexaApp = "reprompt";
@@ -12,10 +17,36 @@ module Response = {
   [@bs.send.pipe: t] external send : unit => Js.Promise.t(complete) = "send";
   [@bs.send.pipe: t]
   external fail : string => Js.Promise.t(complete) = "send";
+
+  [@bs.send.pipe: t] external prepare : unit => alexaApp = "send";
 };
 
 module Request = {
-  type t = {.};
+  type t = {
+    .
+    confirmationStatus: string,
+    context: {.},
+    data: {.},
+    slots: {.},
+    [@bs.optional] userId: string,
+    [@bs.optional] applicationId: string,
+    [@bs.optional] selectedElementToken: string,
+  };
+
+  type requestType =
+    | LaunchRequest
+    | IntentRequest
+    | SessionEndedRequest;
+
+  [@bs.send] external type_ : unit => requestType = "type";
+
+  [@bs.send]
+  external slot : (~slotName: string, ~defaultValue: string=?, unit) => string =
+    "type";
+
+  [@bs.send] external isConfirmed : unit => bool = "isConfirmed";
+  [@bs.send] external getDialog : unit => {.} = "getDialog";
+  [@bs.send] external hasSession : unit => bool = "hasSession";
 };
 
 [@bs.module "alexa-app"] [@bs.new]
